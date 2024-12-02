@@ -61,8 +61,13 @@ export const DeleteTask = async(req, res)=>{
      try {
             let id= req.params.id;
              let user_id= req.headers['user_id']
-             await TaskModel.deleteOne({'_id':id,'user_id': user_id})
-             return res.json({status:"success","message":"User deletedTask successfully"})
+            const result = await TaskModel.deleteOne({'_id':id,'user_id': user_id})
+            if(result.deletedCount === 0){
+                return res.json({status:"fail","message":"User Task not deleted"})
+            }else{
+                return res.json({status:"success","message":"User deletedTask successfully"})
+            }
+
          }
          catch(err){
              return res.json({ status: 'fail', 'Message': err.toString()});
